@@ -1,0 +1,120 @@
+% ===================== Roshani Yadav – One-Page CV =====================
+\documentclass[a4paper,10pt]{article}
+
+% --------------------- Packages ---------------------
+\usepackage[left=0.4in,top=0.35in,right=0.4in,bottom=0.35in]{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+
+% --------------------- Colors & Formatting ---------------------
+\definecolor{primary}{HTML}{003366} % Deep Navy Accent
+
+\hypersetup{
+    colorlinks=true,
+    urlcolor=primary,
+    linkcolor=primary
+}
+
+\pagenumbering{gobble}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+\titleformat{\section}
+  {\large\bfseries\color{primary}}
+  {}
+  {0em}
+  {}
+  [{\color{primary}\titlerule}]
+
+\titlespacing*{\section}{0pt}{3pt}{2pt}
+
+\setlist[itemize]{
+    leftmargin=1.2em,
+    itemsep=0.8pt,
+    topsep=1pt,
+    parsep=0pt,
+    partopsep=0pt
+}
+
+\begin{document}
+
+% --------------------- Header ---------------------
+\begin{center}
+    {\LARGE \textbf{\color{primary}Roshani Yadav}} \\[1.5pt]
+    \small
+    National Institute of Technology Jamshedpur \\[1pt]
+    +91 93294 95487 \,|\,
+    \href{mailto:yroshani270@gmail.com}{yroshani270@gmail.com} \,|\,
+    \href{https://www.linkedin.com/in/roshani-yadav-20271a28a}{LinkedIn} \,|\,
+    \href{https://github.com/roshani-005}{GitHub}
+\end{center}
+
+\vspace{-4pt}
+
+% --------------------- Education ---------------------
+\section*{Education}
+\textbf{B.Tech in Production \& Industrial Engineering} \hfill \textbf{NIT Jamshedpur} \\
+2023 -- 2027 \hfill CGPA: 7.36 / 10 \quad | \quad \textbf{Recent SGPA: 8.43} \\[-1pt]
+
+% --------------------- Skills ---------------------
+\section*{Skills}
+\textbf{Languages \& Backend:} Node.js, TypeScript, Python, SQL, Go (Basics), Fastify, Express, FastAPI, REST APIs, WebSockets \\
+\textbf{Distributed Systems \& Messaging:} Async Workflows, Task Queues (BullMQ / Redis patterns), Telephony Webhooks (VoIP / SIP formats) \\
+\textbf{Generative AI \& Agentic Systems:} Tool Calling, Structured Outputs, LangGraph, State Machines, Human-in-the-Loop Escalation, Guardrails \\
+\textbf{Evaluation \& Observability:} Turn Latency Tracking (p50/p95/p99, TTFT), Groundedness Validation, Hallucination Auditing, RAG Triad, MRR \\
+\textbf{Databases \& Tools:} PostgreSQL, SQLite, ChromaDB, Git, GitHub, Docker, Postman
+
+% --------------------- Projects ---------------------
+\section*{Projects}
+
+\noindent\textbf{OmniVoice-AI: Real-Time Telecom Voice Agent \& Observability Gateway} \hfill [\href{https://github.com/roshani-005/OmniVoice-AI}{Link}] \\
+\textit{Technologies: Node.js, TypeScript, Fastify, WebSockets, Redis / Job Queues, Audio Processing (G.711 / PCM), Vitest, Docker}
+\begin{itemize}
+    \item Built a Node.js and Fastify telecom gateway streaming bi-directional audio over WebSockets (G.711 $\mu$-law and PCM) for conversational AI voice agents with live tool calling.
+    \item Instrumented turn-by-turn latency tracking to break down speech-to-text delay, model time-to-first-token (TTFT), and audio synthesis, computing rolling $p50, p95, p99$ metrics to identify latency spikes.
+    \item Set up an asynchronous background queue to handle post-call tasks without blocking the voice stream, automatically generating call notes, updating CRM records, and sending WhatsApp follow-up messages.
+    \item Implemented deterministic compliance guardrails to catch agent hallucinations (such as unapproved discount promises or false SLA claims) and supported live transfer to a human operator when callers request escalation.
+\end{itemize}
+
+\vspace{1.5pt}
+
+\noindent\textbf{Enterprise RAG Knowledge \& Evaluation System} \hfill [\href{https://github.com/roshani-005/Enterprise-RAG-Knowledge-Evaluation-System}{Link}] \\
+\textit{Technologies: Python, FastAPI, LangChain, ChromaDB, BM25, Pydantic, Docker, GitHub Actions}
+\begin{itemize}
+    \item Built a document QA backend with hybrid retrieval (combining BM25 keyword matching and vector embeddings with Reciprocal Rank Fusion) and cross-encoder reranking to improve context precision.
+    \item Implemented a post-generation validation step to check that answers are strictly grounded in retrieved passages, flagging unverified claims and retrying with broader retrieval when evidence is weak.
+    \item Designed an evaluation harness to measure retrieval quality and answer consistency using Recall@K, Mean Reciprocal Rank (MRR), and citation verification across sample business documents.
+    \item Containerized the service using Docker, exposed query and evaluation endpoints through FastAPI, and set up automated tests with GitHub Actions CI.
+\end{itemize}
+
+\vspace{1.5pt}
+
+\noindent\textbf{Agentic Operations Automation \& Exception Resolution System} \hfill [\href{https://github.com/roshani-005/Agentic-Operations-Automation-Exception-Resolution-System}{Link}] \\
+\textit{Technologies: Python, FastAPI, LangGraph, SQLAlchemy, SQLite, Pydantic, Docker}
+\begin{itemize}
+    \item Built a multi-step workflow engine using LangGraph to automate routine operational tasks, route queries across SQL and API tools, and maintain state across execution steps.
+    \item Added deterministic validation rules and output schema checks with capped retries to handle tool failures and edge cases before escalating unresolved exceptions to human reviewers.
+    \item Recorded structured audit trails of tool inputs, outputs, and agent decisions in a persistent SQLite database for post-execution review and debugging.
+\end{itemize}
+
+% --------------------- Internship ---------------------
+\section*{Internship}
+\textbf{Research Intern -- Strategy \& Analytics} \hfill \textbf{IIM Calcutta (under Prof. Umang Varshney)}
+\begin{itemize}
+    \item Analyzed regulatory and industry data across 50 global apparel brands and synthesized insights from 25+ expert interviews on Digital Product Passport adoption strategies.
+    \item Developed a quantitative framework comparing six circularity configurations and modeled CAPEX and EBIT implications for strategic recommendations.
+    \item Identified decision drivers including scale, operational control, data visibility, and capability requirements to explain when firms should build in-house capabilities versus rely on external partners.
+\end{itemize}
+
+% --------------------- Leadership & Activities ---------------------
+\section*{Leadership \& Activities}
+\begin{itemize}
+    \item \textbf{Joint Core Member -- Official Basketball Team, NIT Jamshedpur:} Represented the institute at Inter-NIT tournaments, contributing to team strategy and performance in competitive environments.
+    \item \textbf{Educator -- SANKALP NGO:} Mentored students through structured academic sessions, strengthening communication, problem-solving, and collaborative skills.
+\end{itemize}
+
+\end{document}
