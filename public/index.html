@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OmniVoice-AI | Real-Time Telecom Voice Agent & Observability Gateway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f293d;
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.25);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent: #38bdf8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      background: linear-gradient(135deg, #6366f1, #3b82f6);
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .badge-licensed {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--success);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .grid-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+      transition: transform 0.2s;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-2px);
+      border-color: #374151;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-value {
+      font-size: 26px;
+      font-weight: 800;
+      margin-top: 6px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .main-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 1.4fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .main-layout { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Scenario Selector */
+    .scenario-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-scenario {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-scenario:hover {
+      background: #334155;
+      border-color: var(--primary);
+    }
+
+    .btn-scenario.active {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--primary);
+      color: #a5b4fc;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    input, textarea, select {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 20px var(--primary-glow);
+      transform: translateY(-1px);
+    }
+
+    /* Live Waterfall Timeline */
+    .waterfall-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .waterfall-turn {
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .turn-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .turn-dialogue {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .turn-dialogue .user-text {
+      color: #93c5fd;
+      margin-bottom: 4px;
+    }
+
+    .turn-dialogue .agent-text {
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    /* Progress Bar Waterfall */
+    .bars-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 60px;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .bar-outer {
+      background: #1e293b;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-inner {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease-out;
+    }
+
+    .bar-stt { background: #38bdf8; }
+    .bar-ttft { background: #818cf8; }
+    .bar-tts { background: #34d399; }
+    .bar-total { background: #f472b6; }
+
+    /* Tags */
+    .tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tag-success { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .tag-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .tag-warning { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+
+    /* Post Call Pipeline Output */
+    .pipeline-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 10px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    .tab-btn.active {
+      background: #1e293b;
+      color: var(--text);
+    }
+
+    .tab-content {
+      font-size: 13px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-logo">📞</div>
+      <div>
+        <div class="brand-title">OmniVoice-AI Telecom Gateway</div>
+        <div class="brand-subtitle">Real-Time VoIP Voice Agent, Async Workflows & Latency Observability</div>
+      </div>
+    </div>
+    <div class="badge-licensed">
+      <span>●</span> DOT Telecom Operator Protocol Active
+    </div>
+  </header>
+
+  <!-- Observability Metrics Summary -->
+  <section class="grid-metrics">
+    <div class="metric-card">
+      <div class="metric-label">Total Calls</div>
+      <div class="metric-value" id="mTotalCalls">0</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">p50 Voice Latency</div>
+      <div class="metric-value" style="color: #38bdf8;" id="mP50">0ms</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">p95 Voice Latency</div>
+      <div class="metric-value" style="color: #818cf8;" id="mP95">0ms</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">p99 Voice Latency</div>
+      <div class="metric-value" style="color: #f472b6;" id="mP99">0ms</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Avg LLM TTFT</div>
+      <div class="metric-value" style="color: #a78bfa;" id="mTtft">0ms</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Hallucinations Flagged</div>
+      <div class="metric-value" style="color: #ef4444;" id="mHallucinations">0</div>
+    </div>
+  </section>
+
+  <!-- Main Workstation Layout -->
+  <main class="main-layout">
+
+    <!-- Column 1: Live Call Simulator & Audio Controls -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title">🎙️ Simulated Inbound Call Engine</div>
+        <span class="tag tag-success" id="callStatusBadge">READY</span>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-muted);">
+        Select a real-world SMB inbound call scenario or type custom caller phrases. The engine executes speech-to-text, tool invocation, TTS audio synthesis, and latency waterfall logging.
+      </p>
+
+      <div class="scenario-buttons">
+        <button class="btn-scenario active" onclick="selectScenario('demo')">
+          📅 <strong>Demo Booking</strong><br>
+          <span style="font-size: 11px; color: var(--text-muted);">Books onboarding slot</span>
+        </button>
+        <button class="btn-scenario" onclick="selectScenario('discount')">
+          ⚠️ <strong>Discount Test</strong><br>
+          <span style="font-size: 11px; color: var(--text-muted);">Tests 15% Guardrail</span>
+        </button>
+        <button class="btn-scenario" onclick="selectScenario('escalation')">
+          🚨 <strong>Human Transfer</strong><br>
+          <span style="font-size: 11px; color: var(--text-muted);">Furious caller & ticket</span>
+        </button>
+        <button class="btn-scenario" onclick="selectScenario('account')">
+          🔍 <strong>Account Query</strong><br>
+          <span style="font-size: 11px; color: var(--text-muted);">CRM lead lookup</span>
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>Caller Phone Number (E.164)</label>
+        <input type="text" id="inputPhone" value="+919876543210" />
+      </div>
+
+      <div class="form-group">
+        <label>Caller Name</label>
+        <input type="text" id="inputName" value="Rahul Sharma (Sharma Logistics)" />
+      </div>
+
+      <div class="form-group">
+        <label>Caller Utterances (1 per line for multi-turn call)</label>
+        <textarea id="inputUtterances" rows="4"></textarea>
+      </div>
+
+      <button class="btn-primary" id="btnSimulate" onclick="triggerSimulatedCall()">
+        <span>🚀</span> Execute Call & Measure Latency Waterfall
+      </button>
+
+      <!-- Post-Call Pipeline Tabs -->
+      <div style="margin-top: 14px; border-top: 1px solid var(--card-border); padding-top: 14px;">
+        <div class="pipeline-tabs">
+          <button class="tab-btn active" onclick="switchTab('whatsapp')">💬 WhatsApp Dispatch</button>
+          <button class="tab-btn" onclick="switchTab('crm')">👤 CRM Record</button>
+          <button class="tab-btn" onclick="switchTab('eval')">🛡️ Hallucination Audit</button>
+        </div>
+        <div id="tabContent" class="tab-content" style="margin-top: 12px;">
+          <p style="color: var(--text-muted); font-size: 12px;">Execute a call above to inspect asynchronous background worker results.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Column 2: Real-time Latency Waterfall & Turn Traces -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title">⏱️ Turn-by-Turn Latency Waterfall & Traces</div>
+        <span style="font-size: 12px; color: var(--text-muted);" id="turnCountLabel">0 Turns Processed</span>
+      </div>
+
+      <p style="font-size: 12px; color: var(--text-muted);">
+        Breaks down each conversational turn: 
+        <span style="color: #38bdf8;">■ STT</span> | 
+        <span style="color: #818cf8;">■ LLM TTFT</span> | 
+        <span style="color: #34d399;">■ TTS Audio</span> | 
+        <span style="color: #f472b6;">■ Total Turnaround</span>
+      </p>
+
+      <div class="waterfall-container" id="waterfallFeed">
+        <div style="text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 13px;">
+          No active call yet. Click "Execute Call" on the left to start streaming turns.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
